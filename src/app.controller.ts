@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
   UseGuards,
   Res,
   Render,
@@ -9,11 +8,10 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { LoginGuard } from './common/guards/login/login.guard';
 import { AuthenticatedGuard } from './common/guards/authenticated/authenticated.guard';
 import { AuthExceptionsFilter } from './common/filters/auth-exceptions/auth-exceptions.filter';
 import { AppService } from './app.service';
-import { UsersService } from './users/users.service';
+import { UsersService } from './authorization/users/users.service';
 
 @Controller()
 @UseFilters(AuthExceptionsFilter)
@@ -54,12 +52,6 @@ export class AppController {
       registerSuccess: req.flash('registerMessage'),
     };
   }
-
-  // @UseGuards(LoginGuard)
-  // @Post('/login')
-  // async login(@Res() res: Response) {
-  //   return res.redirect('/home');
-  // }
 
   @Get('/signup')
   @Render('register')

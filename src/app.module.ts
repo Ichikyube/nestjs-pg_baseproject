@@ -9,22 +9,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MulterModule } from '@nestjs/platform-express';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { OrdersService } from './orders/orders.service';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
 import { LoggedMiddleware } from './common/middleware/logged/logged.middleware';
 import TypeOrmConfigService from './config/database.config';
-import { AdminModule } from './admin/admin.module';
-import { UploadModule } from './upload/upload.module';
-import { CartController } from './cart/cart.controller';
-import { CartModule } from './cart/cart.module';
-import { ItemsModule } from './items/items.module';
-import { Product } from './products/entities/product.entity';
-import { User } from './users/entities';
-import { Order } from './orders/entities/order.entity';
-import { ProductsService } from './products/products.service';
-import { ProductsController } from './products/products.controller';
-import { AccountController } from './account/account.controller';
+import { AccountController } from './authorization/account/account.controller';
+import { Product } from './features/products/entities/product.entity';
+import { User } from './authorization/users/entities';
+import { Order } from './features/orders/entities/order.entity';
+import { AuthModule } from './authorization/auth/auth.module';
+import { UsersModule } from './authorization/users/users.module';
+import { AdminModule } from './authorization/admin/admin.module';
+import { CartController } from './features/cart/cart.controller';
+import { ProductsController } from './features/products/products.controller';
+import { ProductsService } from './features/products/products.service';
+import { OrdersService } from './features/orders/orders.service';
+import { Item } from './features/entities/item.entity';
 
 @Module({
   imports: [
@@ -34,16 +32,13 @@ import { AccountController } from './account/account.controller';
       useClass: TypeOrmConfigService,
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Product, User, Order]),
+    TypeOrmModule.forFeature([Product, User, Order, Item]),
     MulterModule.register({
       dest: './uploads', // specify the destination folder for uploaded files
     }),
     AuthModule,
     UsersModule,
     AdminModule,
-    UploadModule,
-    CartModule,
-    ItemsModule,
   ],
   controllers: [
     AppController,
@@ -53,13 +48,15 @@ import { AccountController } from './account/account.controller';
   ],
   providers: [AppService, ProductsService, OrdersService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggedMiddleware)
-      .forRoutes(
-        { path: 'signin', method: RequestMethod.GET },
-        { path: 'signup', method: RequestMethod.GET },
-      );
-  }
-}
+export class AppModule {}
+
+// export class AppModule implements NestModule {
+//   configure(consumer: MiddlewareConsumer) {
+//     consumer
+//       .apply(LoggedMiddleware)
+//       .forRoutes(
+//         { path: 'signin', method: RequestMethod.GET },
+//         { path: 'signup', method: RequestMethod.GET },
+//       );
+//   }
+// }
