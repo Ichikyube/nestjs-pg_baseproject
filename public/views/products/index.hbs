@@ -1,0 +1,18 @@
+{{#> app}}
+    {{#*inline "body"}}
+        <div class="d-flex flex-wrap justify-content-around">
+            {{#each viewData.products}}
+            <div class="col-md-4 col-lg-3 px-1 mb-4">
+                <div class="card">
+                    <img src="/uploads/{{getImage}}" class="card-img-top img-card">
+
+                    <div class="card-body d-flex justify-content-between">
+                        <p class="d-inline-flex text-start justify-content-center">USD$<span class="fs-1">{{getPrice}}</span></p>
+                        <a style="width:100px" href="/products/{{getId}}" class="btn bg-primary text-white text-center text-truncate me-2">{{getName}}</a>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    {{/inline}}
+{{/app}}
