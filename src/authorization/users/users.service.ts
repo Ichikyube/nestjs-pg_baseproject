@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, Inject } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Inject,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -56,9 +61,12 @@ export class UsersService {
     password: string,
   ): Promise<Omit<User, 'password'> | null> {
     const user = await this.userRepository.findOneBy({ username });
+    if (!user) {
+      throw new NotFoundException('The item does not exist');
+    }
     const validate = await this.encryption.compare(
       password,
-      user.getPassword(),
+      user?.getPassword(),
     );
     return validate ? user : null;
   }

@@ -6,6 +6,7 @@ import {
   Redirect,
   Req,
   Res,
+  UseFilters,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -15,24 +16,35 @@ import { LoginGuard } from 'src/common/guards/login/login.guard';
 import { UserValidator } from 'src/utils/validators/users.validator';
 import { User } from '../users/entities';
 import { UsersService } from '../users/users.service';
+import { AuthExceptionsFilter } from 'src/common/filters/auth-exceptions/auth-exceptions.filter';
+import { LoginDto } from './dto/login.dto';
 @Controller('auth')
 export class AuthController {
   constructor(private usersService: UsersService) {}
 
   //@UseGuards(LoginGuard)
   @Post('/login')
-  async connect(@Body() body, @Req() req, @Res() res) {
+  //@UseFilters(AuthExceptionsFilter)
+  @UsePipes(ValidationPipe)
+  async connect(@Body() body: LoginDto, @Req() req, @Res() res) {
+    const toValidate: string[] = ['username', 'password'];
+    const errors: string[] = UserValidator.validate(body, toValidate);
     const { username, password } = body;
-    const user = await this.usersService.validateUser(username, password);
-    if (user) {
-      req.session.user = {
-        id: user.getId(),
-        name: user.getName(),
-        role: user.getRole(),
-      };
-      return res.redirect('/');
-    } else {
+    if (errors.length > 0) {
+      req.flash('error', errors);
       return res.redirect('/signin');
+    } else {
+      const user = await this.usersService.validateUser(username, password);
+      if (user) {
+        req.session.user = {
+          id: user.getId(),
+          name: user.getName(),
+          role: user.getRole(),
+        };
+        return res.redirect('/');
+      } else {
+        return res.redirect('/signin');
+      }
     }
   }
 
@@ -48,7 +60,7 @@ export class AuthController {
     const { email, password, username } = body;
     if (errors.length > 0) {
       req.flash('error', errors);
-      return res.redirect('/auth/register');
+      return res.redirect('/signup');
     } else {
       const newUser = new User();
       newUser.setEmail(email);
