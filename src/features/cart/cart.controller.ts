@@ -13,13 +13,15 @@ import { ProductsService } from '../products/products.service';
 import { Product } from '../products/entities/product.entity';
 import { UsersService } from 'src/authorization/users/users.service';
 import { OrdersService } from '../orders/orders.service';
-import { Item } from '../entities/item.entity';
+import { Item } from '../items/entities/item.entity';
 import { Order } from '../orders/entities/order.entity';
+import { ItemsService } from '../items/items.service';
 @Controller('cart')
 export class CartController {
   constructor(
     private readonly productsService: ProductsService,
     private readonly usersService: UsersService,
+    private readonly itemsService: ItemsService,
     private readonly ordersService: OrdersService,
   ) {}
   @Get('/')
@@ -77,10 +79,11 @@ export class CartController {
       const items: Item[] = [];
       for (let i = 0; i < productsInCart.length; i++) {
         const quantity = productsInSession[productsInCart[i].getId()];
-        const item = new Item();
-        item.setQuantity(quantity);
-        item.setPrice(productsInCart[i].getPrice());
-        item.setProduct(productsInCart[i]);
+        const newItem = new Item();
+        newItem.setQuantity(quantity);
+        newItem.setPrice(productsInCart[i].getPrice());
+        newItem.setProduct(productsInCart[i]);
+        const item = await this.itemsService.createOrUpdate(newItem);
         items.push(item);
         total = total + productsInCart[i].getPrice() * quantity;
       }

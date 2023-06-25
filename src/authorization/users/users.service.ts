@@ -8,16 +8,17 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  getUsers() {
-    throw new Error('Method not implemented.');
-  }
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @Inject('ENCRYPTION') private readonly encryption: typeof bcrypt,
   ) {}
-
+  getUsers() {
+    throw new Error('Method not implemented.');
+  }
   async createUser(userData: User) {
-    const hash = await this.encryption.hash(userData.password, 10);
+    const saltRounds = 10; // Number of salt rounds for bcrypt
+    const salt = await this.encryption.genSalt(saltRounds);
+    const hash = await this.encryption.hash(userData.password, salt);
     userData.setPassword(hash);
     const newUser = this.userRepository.create(userData);
     await this.userRepository.save(newUser);
@@ -34,14 +35,14 @@ export class UsersService {
   async updateUser(userId: number, request: UpdateUserDto) {
     const userExist = await this.userRepository.findOneBy({ id: userId });
     if (userExist) {
-      throw new BadRequestException('data user tidak ditemukan');
+      throw new BadRequestException('user tidak ditemukan');
     }
-
     userExist.setEmail(request.email);
     userExist.setPassword(request.password);
     userExist.setName(request.username);
     return this.userRepository.save(userExist);
   }
+
   async deleteUser(userId: number) {
     const user = await this.userRepository.findOneBy({ id: userId });
     if (!user) {
@@ -50,16 +51,16 @@ export class UsersService {
     this.userRepository.remove(user);
   }
 
-  async validate(
+  async validateUser(
     username: string,
     password: string,
   ): Promise<Omit<User, 'password'> | null> {
-    const user = await this.userRepository.findOneBy({ username: username });
-    const validate = await this.encryption.compare(password, user.password);
-    if (validate) {
-      return user;
-    }
-    return null;
+    const user = await this.userRepository.findOneBy({ username });
+    const validate = await this.encryption.compare(
+      password,
+      user.getPassword(),
+    );
+    return validate ? user : null;
   }
 
   async findOneByEmail(email: string) {

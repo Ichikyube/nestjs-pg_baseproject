@@ -2,8 +2,6 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
 import { Transform } from 'class-transformer';
 import { IsEmail, IsOptional, MinLength, Validate } from 'class-validator';
-import { Role } from '../../roles/entities/role.entity';
-import { Status } from '../../statuses/entities/status.entity';
 import { IsNotExist } from 'src/utils/validators/is-not-exists.validator';
 import { FileEntity } from 'src/files/entities/file.entity';
 import { IsExist } from 'src/utils/validators/is-exists.validator';
@@ -40,20 +38,6 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     message: 'imageNotExists',
   })
   photo?: FileEntity | null;
-
-  @ApiProperty({ type: Role })
-  @IsOptional()
-  @Validate(IsExist, ['Role', 'id'], {
-    message: 'roleNotExists',
-  })
-  role?: Role | null;
-
-  @ApiProperty({ type: Status })
-  @IsOptional()
-  @Validate(IsExist, ['Status', 'id'], {
-    message: 'statusNotExists',
-  })
-  status?: Status;
 
   hash?: string | null;
 }

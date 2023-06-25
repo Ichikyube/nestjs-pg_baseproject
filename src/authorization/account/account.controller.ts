@@ -12,7 +12,6 @@ export class AccountController {
     viewData['orders'] = await this.ordersService.findByUserId(
       request.session.user.id,
     );
-    console.log(viewData['orders'].items);
     return { viewData };
   }
 }

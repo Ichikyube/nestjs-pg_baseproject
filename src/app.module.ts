@@ -22,7 +22,8 @@ import { CartController } from './features/cart/cart.controller';
 import { ProductsController } from './features/products/products.controller';
 import { ProductsService } from './features/products/products.service';
 import { OrdersService } from './features/orders/orders.service';
-import { Item } from './features/entities/item.entity';
+import { Item } from './features/items/entities/item.entity';
+import { ItemsService } from './features/items/items.service';
 
 @Module({
   imports: [
@@ -46,7 +47,7 @@ import { Item } from './features/entities/item.entity';
     ProductsController,
     AccountController,
   ],
-  providers: [AppService, ProductsService, OrdersService],
+  providers: [AppService, ProductsService, OrdersService, ItemsService],
 })
 export class AppModule {}
 

@@ -12,18 +12,18 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { LoginGuard } from 'src/common/guards/login/login.guard';
-import { AuthService } from './auth.service';
 import { UserValidator } from 'src/utils/validators/users.validator';
 import { User } from '../users/entities';
+import { UsersService } from '../users/users.service';
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private usersService: UsersService) {}
 
-  @UseGuards(LoginGuard)
+  //@UseGuards(LoginGuard)
   @Post('/login')
   async connect(@Body() body, @Req() req, @Res() res) {
-    const { email, password } = body;
-    const user = await this.authService.validateUser(email, password);
+    const { username, password } = body;
+    const user = await this.usersService.validateUser(username, password);
     if (user) {
       req.session.user = {
         id: user.getId(),
@@ -32,7 +32,7 @@ export class AuthController {
       };
       return res.redirect('/');
     } else {
-      return res.redirect('/auth/login');
+      return res.redirect('/signin');
     }
   }
 
@@ -56,7 +56,7 @@ export class AuthController {
       newUser.setName(username);
       newUser.setRole('client');
       newUser.setBalance(1000);
-      const { message } = await this.authService.register(newUser);
+      const { message } = await this.usersService.createUser(newUser);
       req.flash('registerMessage', message);
       return res.redirect('/');
     }
