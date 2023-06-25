@@ -12,19 +12,19 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { LoginGuard } from 'src/common/guards/login/login.guard';
 import { UserValidator } from 'src/utils/validators/users.validator';
-import { User } from '../users/entities';
+import { User } from '../../entities';
 import { UsersService } from '../users/users.service';
 import { LoginDto } from './dto/login.dto';
-import { LocalAuthGuard } from './guards/local-auth/local-auth.guard';
+import { LocalAuthGuard } from '../../common/guards/local-auth/local-auth.guard';
+import { AuthExceptionsFilter } from 'src/common/filters/auth-exceptions/auth-exceptions.filter';
 @Controller('auth')
+@UseFilters(AuthExceptionsFilter)
 export class AuthController {
   constructor(private usersService: UsersService) {}
 
-  @UseGuards(LocalAuthGuard)
   @Post('/login')
-  //@UseFilters(AuthExceptionsFilter)
+  @UseGuards(LocalAuthGuard)
   @UsePipes(ValidationPipe)
   async connect(@Body() body: LoginDto, @Req() req, @Res() res) {
     const toValidate: string[] = ['username', 'password'];
@@ -41,6 +41,7 @@ export class AuthController {
           name: user.getName(),
           role: user.getRole(),
         };
+        req.flash('loginError', 'Invalid username or password');
         return res.redirect('/home');
       } else {
         return res.redirect('/signin');

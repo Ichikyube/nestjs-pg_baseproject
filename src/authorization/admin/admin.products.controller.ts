@@ -14,7 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ProductValidator } from 'src/utils/validators/product.validator';
 import * as fs from 'fs';
 import { ProductsService } from 'src/features/products/products.service';
-import { Product } from 'src/features/products/entities/product.entity';
+import { Product } from 'src/entities/product.entity';
 
 @Controller('admin/products')
 export class AdminProductsController {

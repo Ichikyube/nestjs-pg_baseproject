@@ -7,8 +7,8 @@ import { randomStringGenerator } from '@nestjs/common/utils/random-string-genera
 import * as AWS from 'aws-sdk';
 import * as multerS3 from 'multer-s3';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FileEntity } from './entities/file.entity';
 import { FilesService } from './files.service';
+import { FileEntity } from 'src/entities';
 
 @Module({
   imports: [

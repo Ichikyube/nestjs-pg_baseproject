@@ -1,5 +1,12 @@
-import { Order } from 'src/features/orders/entities/order.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Role } from 'src/entities/role.entity';
+import { Order } from 'src/entities/order.entity';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -31,6 +38,9 @@ export class User {
 
   @Column()
   role: string;
+
+  @ManyToMany(() => Role, (role) => role.users)
+  roles: Role[];
 
   @Column()
   balance: number;

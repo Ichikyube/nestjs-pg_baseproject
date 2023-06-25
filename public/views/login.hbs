@@ -18,7 +18,9 @@
           </div>
           <div class="mdl-card__actions mdl-card--border">
             <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Log In</button>
-            <span class="mdl-textfield__error">{{ message }}</span>
+            {{#if message}}
+              <div class="alert alert-danger mdl-textfield__error">{{message}}</div>
+            {{/if}}
           </div>
         </form>
         <a href="signup"><button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Sign Up</button></a>

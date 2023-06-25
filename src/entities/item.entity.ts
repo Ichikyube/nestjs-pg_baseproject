@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Order } from '../../orders/entities/order.entity';
-import { Product } from '../../products/entities/product.entity';
+import { Order } from './order.entity';
+import { Product } from './product.entity';
 @Entity()
 export class Item {
   @PrimaryGeneratedColumn()

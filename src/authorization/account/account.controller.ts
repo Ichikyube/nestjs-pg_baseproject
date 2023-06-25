@@ -1,6 +1,5 @@
 import { Controller, Get, Render, Req, UseGuards } from '@nestjs/common';
 import { AuthenticatedGuard } from 'src/common/guards/authenticated/authenticated.guard';
-import { LoginGuard } from 'src/common/guards/login/login.guard';
 import { OrdersService } from 'src/features/orders/orders.service';
 @Controller('/account')
 export class AccountController {

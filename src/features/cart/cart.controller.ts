@@ -11,11 +11,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from '../products/products.service';
-import { Product } from '../products/entities/product.entity';
+import { Product } from '../../entities/product.entity';
 import { UsersService } from 'src/authorization/users/users.service';
 import { OrdersService } from '../orders/orders.service';
-import { Item } from '../items/entities/item.entity';
-import { Order } from '../orders/entities/order.entity';
+import { Item } from '../../entities/item.entity';
+import { Order } from '../../entities/order.entity';
 import { ItemsService } from '../items/items.service';
 import { AuthenticatedGuard } from 'src/common/guards/authenticated/authenticated.guard';
 @UseGuards(AuthenticatedGuard)
