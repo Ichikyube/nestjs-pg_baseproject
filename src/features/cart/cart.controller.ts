@@ -8,6 +8,7 @@ import {
   Body,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from '../products/products.service';
 import { Product } from '../products/entities/product.entity';
@@ -16,6 +17,8 @@ import { OrdersService } from '../orders/orders.service';
 import { Item } from '../items/entities/item.entity';
 import { Order } from '../orders/entities/order.entity';
 import { ItemsService } from '../items/items.service';
+import { AuthenticatedGuard } from 'src/common/guards/authenticated/authenticated.guard';
+@UseGuards(AuthenticatedGuard)
 @Controller('cart')
 export class CartController {
   constructor(

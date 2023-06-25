@@ -16,13 +16,13 @@ import { LoginGuard } from 'src/common/guards/login/login.guard';
 import { UserValidator } from 'src/utils/validators/users.validator';
 import { User } from '../users/entities';
 import { UsersService } from '../users/users.service';
-import { AuthExceptionsFilter } from 'src/common/filters/auth-exceptions/auth-exceptions.filter';
 import { LoginDto } from './dto/login.dto';
+import { LocalAuthGuard } from './guards/local-auth/local-auth.guard';
 @Controller('auth')
 export class AuthController {
   constructor(private usersService: UsersService) {}
 
-  //@UseGuards(LoginGuard)
+  @UseGuards(LocalAuthGuard)
   @Post('/login')
   //@UseFilters(AuthExceptionsFilter)
   @UsePipes(ValidationPipe)
@@ -41,7 +41,7 @@ export class AuthController {
           name: user.getName(),
           role: user.getRole(),
         };
-        return res.redirect('/');
+        return res.redirect('/home');
       } else {
         return res.redirect('/signin');
       }

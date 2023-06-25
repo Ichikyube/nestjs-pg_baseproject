@@ -49,15 +49,8 @@ import { ItemsService } from './features/items/items.service';
   ],
   providers: [AppService, ProductsService, OrdersService, ItemsService],
 })
-export class AppModule {}
-
-// export class AppModule implements NestModule {
-//   configure(consumer: MiddlewareConsumer) {
-//     consumer
-//       .apply(LoggedMiddleware)
-//       .forRoutes(
-//         { path: 'signin', method: RequestMethod.GET },
-//         { path: 'signup', method: RequestMethod.GET },
-//       );
-//   }
-// }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggedMiddleware).forRoutes('*');
+  }
+}
