@@ -4,6 +4,9 @@
     <h1>Welcome to the Index page</h1>
     <p>The current time is {{viewData.currentTime}}</p>
 </div>
+{{#if message}}
+    <div class="alert alert-danger mdl-textfield__error">{{message}}</div>
+{{/if}}
 <div class="row">
     <div class="col-md-6 col-lg-4 mb-2">
         <img src="/uploads/game.jpg" class="img-fluid rounded">

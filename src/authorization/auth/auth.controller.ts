@@ -41,7 +41,6 @@ export class AuthController {
           name: user.getName(),
           role: user.getRole(),
         };
-        req.flash('loginError', 'Invalid username or password');
         return res.redirect('/home');
       } else {
         return res.redirect('/signin');

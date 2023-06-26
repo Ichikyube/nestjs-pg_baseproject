@@ -9,6 +9,7 @@ import {
   Post,
   Res,
   UseGuards,
+  UseFilters,
 } from '@nestjs/common';
 import { ProductsService } from '../products/products.service';
 import { Product } from '../../entities/product.entity';
@@ -18,8 +19,11 @@ import { Item } from '../../entities/item.entity';
 import { Order } from '../../entities/order.entity';
 import { ItemsService } from '../items/items.service';
 import { AuthenticatedGuard } from 'src/common/guards/authenticated/authenticated.guard';
-@UseGuards(AuthenticatedGuard)
+import { AuthExceptionsFilter } from 'src/common/filters/auth-exceptions/auth-exceptions.filter';
+
 @Controller('cart')
+@UseGuards(AuthenticatedGuard)
+@UseFilters(AuthExceptionsFilter)
 export class CartController {
   constructor(
     private readonly productsService: ProductsService,

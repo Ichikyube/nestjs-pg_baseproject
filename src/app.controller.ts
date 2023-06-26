@@ -14,7 +14,6 @@ import { AppService } from './app.service';
 import { UsersService } from './authorization/users/users.service';
 
 @Controller()
-@UseFilters(AuthExceptionsFilter)
 export class AppController {
   constructor(
     private readonly appService: AppService,
@@ -44,10 +43,12 @@ export class AppController {
   @Get('signin')
   @Render('login')
   loginView(@Req() req: Request): {
+    topmessage: string[];
     message: string[];
     registerSuccess: string[];
   } {
     return {
+      topmessage: req.flash('AccessError'),
       message: req.flash('loginError'),
       registerSuccess: req.flash('registerMessage'),
     };
